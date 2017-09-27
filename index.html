@@ -12,22 +12,30 @@
 	var statusW = document.getElementById('statusDiv');
 	var viewPortWidth = 32;
 	var viewPortHeight = 18;
+	var terrainY = new Array(viewPortHeight);
 
-	function buildViewport(){
-	    for(j=0; j<viewPortHeight; j++){
-	        map.insertRow(j);
-	        for(i=0; i<viewPortWidth; i++) {
-                map.rows[j].insertCell(i);
-				map.rows[j].cells[i].addEventListener('mouseover', function () {
-                    getInfo(this);
-                });
-                map.rows[j].cells[i].addEventListener('mouseleave', function () {
-                    statusW.innerHTML = "";
-                });
-            }
+	//Build Arrays to hold terrain info
+	for(j=0; j<terrainY.length; j++) {
+    	var terrainX = new Array(viewPortWidth);
+    	for(i=0; i<viewPortWidth; i++){
+    	    terrainX[i] = "";
+		}
+		terrainY[j] = terrainX;
+	}
+
+	//Build Viewport
+	for(j=0; j<viewPortHeight; j++){
+		map.insertRow(j);
+		for(i=0; i<viewPortWidth; i++) {
+			map.rows[j].insertCell(i);
+			map.rows[j].cells[i].addEventListener('mouseover', function () {
+				getInfo(this);
+			});
+			map.rows[j].cells[i].addEventListener('mouseleave', function () {
+				statusW.innerHTML = "";
+			});
 		}
 	}
-	buildViewport();
 
 	function userInput(event){
 		var k = event.which || event.keyCode;
@@ -55,19 +63,22 @@
 		for(j=0; j<viewPortHeight; j++){
 			for(i=0; i<viewPortWidth; i++){
         	    if(playerXY.x == i && playerXY.y == j) {
-                    map.rows[j].cells[i].style = "color:BurlyWood";
+                    map.rows[j].cells[i].style = "color:BurlyWood; cursor:default";
                     map.rows[j].cells[i].innerHTML = "Q";
+                    terrainY[j][i] = " You!";
 				}
 				else {
-                    map.rows[j].cells[i].style = "color:green";
+                    map.rows[j].cells[i].style = "color:green; cursor:default";
                     map.rows[j].cells[i].innerHTML = "#";
+                    terrainY[j][i] = " a patch of grass.";
 				}
 			}
 		}
 	}
 
 	function getInfo(tile) {
-		statusW.innerHTML = tile.cellIndex+", "+tile.parentNode.rowIndex;
+		var terrain = terrainY[tile.parentNode.rowIndex][tile.cellIndex];
+	    statusW.innerHTML = "That is " +terrain;
 	}
 	draw();
 </script>
