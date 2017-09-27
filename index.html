@@ -1,0 +1,69 @@
+<html>
+<body onkeypress="userInput(event)"
+	style="background-color:black;">
+<div>
+	<table id=mapTable style="color:white"></table>
+</div>
+<div id=statusDiv style="color:white"/>
+</body>
+<script>
+	var playerXY = {x:15, y:8};
+	var map = document.getElementById('mapTable');
+	var statusW = document.getElementById('statusDiv');
+	var coordsX = [32];
+	var coordsY = [18];
+
+	function userInput(event){
+		var k = event.which || event.keyCode;
+
+		if(k==119 || k==97 || k==115 || k==100) move(k); //W, A, S, D
+		//else alert(k);
+	}
+
+	function move(k){
+		if(k == 119) --playerXY.y;
+		else if(k == 97) --playerXY.x;
+		else if(k == 115) ++playerXY.y;
+		else if(k == 100) ++playerXY.x;
+
+		//restrict to visible area
+		if(playerXY.x == coordsX.length) playerXY.x = 31;
+		if(playerXY.x < 0) playerXY.x = 0;
+		if(playerXY.y == coordsY.length) playerXY.y = 17;
+		if(playerXY.y < 0) playerXY.y = 0;
+
+		draw();
+	}
+
+	function draw(){
+		map.innerHTML = "";
+
+		for(y=0; y<18; y++){
+			coordsY[y] = map.insertRow(y);
+
+			for(x=0; x<32; x++){
+				coordsX[x] = coordsY[y].insertCell(x);
+				coordsX[x].addEventListener('mouseover', function(){
+					getInfo(this);
+				});
+				coordsX[x].addEventListener('mouseleave', function(){
+					statusW.innerHTML = "";
+				})
+				if(playerXY.x == x && playerXY.y == y) {
+					coordsX[x].style = "color:BurlyWood";
+					coordsX[x].innerHTML = "Q";
+				}
+				else {
+					coordsX[x].style = "color:green";
+					coordsX[x].innerHTML = "#";
+				}
+			}
+		}
+	}
+
+	function getInfo(tile) {
+		statusW.innerHTML = tile.cellIndex+", "+tile.parentNode.rowIndex;
+	}
+	draw();
+</script>
+</html>
