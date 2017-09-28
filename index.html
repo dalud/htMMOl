@@ -1,19 +1,31 @@
 <html>
+
 <body onkeypress="userInput(event)"
 	style="background-color:black;">
-<div>
-	<table id=mapTable style="color:white"></table>
-</div>
-<div id=statusDiv style="color:white"/>
+	<table id="UI">
+		<tr id="plaeyrStats"><td id=HP style="color: red"></td></tr>
+		<tr><td><table id=mapTable style="color: white"></table></td></tr>
+		<tr><td id=statusDiv style="color: white"></td></tr>
+	</table>
 </body>
+
 <script>
-	var playerXY = {x:15, y:8};
 	var map = document.getElementById('mapTable');
 	var statusW = document.getElementById('statusDiv');
-	var viewPortWidth = 32;
-	var viewPortHeight = 18;
+	var HPDisplay = document.getElementById('HP');
+	var viewPortWidth = 16*3;
+	var viewPortHeight = 8*3;
+    var playerXY = {x:viewPortWidth/2, y:viewPortHeight/2};
 	var terrainY = new Array(viewPortHeight);
+	var activeTile = {x:playerXY.x, y:playerXY.y};
+	var playerHP = 12;
 
+    map.addEventListener('mouseleave', function () {
+        statusW.innerHTML = "";
+    });
+    map.addEventListener('click', function () {
+        action(activeTile.x, activeTile.y);
+    });
 	//Build Arrays to hold terrain info
 	for(j=0; j<terrainY.length; j++) {
     	var terrainX = new Array(viewPortWidth);
@@ -23,6 +35,9 @@
 		terrainY[j] = terrainX;
 	}
 
+    //Build PlayerStats
+    HPDisplay.innerHTML = "HP: " +playerHP;
+
 	//Build Viewport
 	for(j=0; j<viewPortHeight; j++){
 		map.insertRow(j);
@@ -30,9 +45,6 @@
 			map.rows[j].insertCell(i);
 			map.rows[j].cells[i].addEventListener('mouseover', function () {
 				getInfo(this);
-			});
-			map.rows[j].cells[i].addEventListener('mouseleave', function () {
-				statusW.innerHTML = "";
 			});
 		}
 	}
@@ -77,9 +89,16 @@
 	}
 
 	function getInfo(tile) {
+	    activeTile.x = tile.cellIndex;
+	    activeTile.y = tile.parentNode.rowIndex;
 		var terrain = terrainY[tile.parentNode.rowIndex][tile.cellIndex];
 	    statusW.innerHTML = "That is " +terrain;
 	}
+
+	function action(x, y){
+	    statusW.innerHTML = "You attack " +terrainY[y][x];
+	}
+
 	draw();
 </script>
 </html>
