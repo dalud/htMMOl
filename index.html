@@ -36,7 +36,11 @@
 	}
 
     //Build PlayerStats
-    HPDisplay.innerHTML = "HP: " +playerHP;
+    function updatePlayerStats(){
+        HPDisplay.innerHTML = "HP: " +playerHP;
+    }
+    updatePlayerStats();
+
 
 	//Build Viewport
 	for(j=0; j<viewPortHeight; j++){
@@ -97,6 +101,8 @@
 
 	function action(x, y){
 	    statusW.innerHTML = "You attack " +terrainY[y][x];
+	    playerHP--;
+	    updatePlayerStats();
 	}
 
 	draw();
