@@ -1,10 +1,10 @@
 <html>
 
-<body onkeypress="userInput(event)"
+<body onkeypress="userInput(event)" onselectstart="return false;"
 	style="background-color:black;">
-	<table id="UI">
-		<tr id="plaeyrStats"><td id=HP style="color: red"></td></tr>
-		<tr><td><table id=mapTable style="color: white"></table></td></tr>
+	<table id="UI" >
+		<tr id="plaeyrStats"><td id=HP style="color: red; cursor: default"></td></tr>
+		<tr><td><table id=mapTable  style="color: white"></table></td></tr>
 		<tr><td id=statusDiv style="color: white"></td></tr>
 	</table>
 </body>
@@ -37,7 +37,7 @@
 
     //Build PlayerStats
     function updatePlayerStats(){
-        HPDisplay.innerHTML = "HP: " +playerHP;
+	    HPDisplay.innerHTML = "HP: " +playerHP;
     }
     updatePlayerStats();
 
@@ -70,7 +70,7 @@
 		if(playerXY.x == viewPortWidth) playerXY.x = viewPortWidth-1;
 		if(playerXY.x < 0) playerXY.x = 0;
 		if(playerXY.y == viewPortHeight) playerXY.y = viewPortHeight-1;
-		if(playerXY.y < 0) playerXY.y = 0;
+		if(playerXY.y < 1) playerXY.y = 1;
 
 		draw();
 	}
@@ -78,15 +78,20 @@
 	function draw(){
 		for(j=0; j<viewPortHeight; j++){
 			for(i=0; i<viewPortWidth; i++){
-        	    if(playerXY.x == i && playerXY.y == j) {
+			    if(j==0){
+                    map.rows[j].cells[i].style = "color:Gray; cursor:default";
+                    map.rows[j].cells[i].innerHTML = "O";
+                    terrainY[j][i] = " somekinda border";
+				}
+        	    else if(playerXY.x == i && playerXY.y == j) {
                     map.rows[j].cells[i].style = "color:BurlyWood; cursor:default";
                     map.rows[j].cells[i].innerHTML = "Q";
                     terrainY[j][i] = " You!";
 				}
 				else {
-                    map.rows[j].cells[i].style = "color:green; cursor:default";
+                    map.rows[j].cells[i].style = "color:green; cursor:default; ";
                     map.rows[j].cells[i].innerHTML = "#";
-                    terrainY[j][i] = " a patch of grass.";
+                    terrainY[j][i] = " a patch of grass";
 				}
 			}
 		}
@@ -101,7 +106,7 @@
 
 	function action(x, y){
 	    statusW.innerHTML = "You attack " +terrainY[y][x];
-	    playerHP--;
+	    if(x == playerXY.x && y == playerXY.y) playerHP--;
 	    updatePlayerStats();
 	}
 
