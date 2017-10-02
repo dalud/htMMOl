@@ -1,34 +1,40 @@
 <html>
 
 <body onkeypress="userInput(event)" onselectstart="return false;"
-	style="background-color:black;">
-	<table id="UI" >
-		<tr id="plaeyrStats"><td id=HP style="color: red; cursor: default"></td></tr>
-		<tr><td><table id=mapTable  style="color: white"></table></td></tr>
+	style="background-color:black; font-family: 'Courier New'">
+	<table id="UI" border="2px white">
+		<tr id="plaeyrStats" style="border: 1px solid white"><td id=HP style="color: red; cursor: default; border: 1px solid white; font-size: 125%; font-weight: bolder"></td></tr>
+		<tr><td><table id=mapTable  style="color: white; cellpadding: 0px; font-weight: bold"></table></td></tr>
 		<tr><td id=statusDiv style="color: white"></td></tr>
 	</table>
 </body>
 
 <script>
-	var map = document.getElementById('mapTable');
-	var statusW = document.getElementById('statusDiv');
-	var HPDisplay = document.getElementById('HP');
-	var viewPortWidth = 16*3;
-	var viewPortHeight = 8*3;
-    var playerXY = {x:viewPortWidth/2, y:viewPortHeight/2};
-	var terrainY = new Array(viewPortHeight);
-	var activeTile = {x:playerXY.x, y:playerXY.y};
-	var playerHP = 12;
+	let map = document.getElementById('mapTable');
+	let statusW = document.getElementById('statusDiv');
+	let HPDisplay = document.getElementById('HP');
+	const viewPortWidth = 16*3;
+	const viewPortHeight = 8*3;
+    let playerXY = {x:viewPortWidth/2-1, y:viewPortHeight/2-1};
+	let terrainY = new Array(viewPortHeight);
+	let activeTile = {x:playerXY.x, y:playerXY.y};
+	let playerHP = 12;
 
-    map.addEventListener('mouseleave', function () {
-        statusW.innerHTML = "";
+    statusW.innerHTML = "Welcome to Nair";
+
+    HPDisplay.addEventListener('mouseover', function(){
+        statusW.innerHTML = "Your Hit Points mark your physical condition";
+	});
+
+    map.addEventListener('mouseleave', function (){
+        statusW.innerHTML = "You're standing in the R&D clearing of Discordia";
     });
-    map.addEventListener('click', function () {
+    map.addEventListener('click', function (){
         action(activeTile.x, activeTile.y);
     });
 	//Build Arrays to hold terrain info
 	for(j=0; j<terrainY.length; j++) {
-    	var terrainX = new Array(viewPortWidth);
+    	let terrainX = new Array(viewPortWidth);
     	for(i=0; i<viewPortWidth; i++){
     	    terrainX[i] = "";
 		}
@@ -54,7 +60,7 @@
 	}
 
 	function userInput(event){
-		var k = event.which || event.keyCode;
+		const k = event.which || event.keyCode;
 
 		if(k==119 || k==97 || k==115 || k==100) move(k); //W, A, S, D
 		//else alert(k);
@@ -70,7 +76,7 @@
 		if(playerXY.x == viewPortWidth) playerXY.x = viewPortWidth-1;
 		if(playerXY.x < 0) playerXY.x = 0;
 		if(playerXY.y == viewPortHeight) playerXY.y = viewPortHeight-1;
-		if(playerXY.y < 1) playerXY.y = 1;
+		if(playerXY.y < 0) playerXY.y = 0;
 
 		draw();
 	}
@@ -78,13 +84,8 @@
 	function draw(){
 		for(j=0; j<viewPortHeight; j++){
 			for(i=0; i<viewPortWidth; i++){
-			    if(j==0){
-                    map.rows[j].cells[i].style = "color:Gray; cursor:default";
-                    map.rows[j].cells[i].innerHTML = "O";
-                    terrainY[j][i] = " somekinda border";
-				}
-        	    else if(playerXY.x == i && playerXY.y == j) {
-                    map.rows[j].cells[i].style = "color:BurlyWood; cursor:default";
+			    if(playerXY.x == i && playerXY.y == j) {
+                    map.rows[j].cells[i].style = "color:BurlyWood; cursor:default; font-weight: bold";
                     map.rows[j].cells[i].innerHTML = "Q";
                     terrainY[j][i] = " You!";
 				}
@@ -100,7 +101,7 @@
 	function getInfo(tile) {
 	    activeTile.x = tile.cellIndex;
 	    activeTile.y = tile.parentNode.rowIndex;
-		var terrain = terrainY[tile.parentNode.rowIndex][tile.cellIndex];
+		const terrain = terrainY[tile.parentNode.rowIndex][tile.cellIndex];
 	    statusW.innerHTML = "That is " +terrain;
 	}
 
