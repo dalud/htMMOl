@@ -1,116 +1,13 @@
 <html>
-
+<!-- <head><meta http-equiv="refresh" content="1" /></head> -->
 <body onkeypress="userInput(event)" onselectstart="return false;"
-	style="background-color:black; font-family: 'Courier New'">
-	<table id="UI" border="2px white">
-		<tr id="plaeyrStats" style="border: 1px solid white"><td id=HP style="color: red; cursor: default; border: 1px solid white; font-size: 125%; font-weight: bolder"></td></tr>
-		<tr><td><table id=mapTable  style="color: white; cellpadding: 0px; font-weight: bold"></table></td></tr>
-		<tr><td id=statusDiv style="color: white"></td></tr>
+	style="background-color:black; font-family: 'Courier New'; color: white">
+	<table id="UI" border="2px groove white"  style="cursor: default">
+		<tr id="plaeyrStats" style="border: 1px solid white"><td id=HP style="color: red; border: 1px solid white; font-size: 125%; font-weight: bolder"></td></tr>
+		<tr><td><table id=mapTable  style="cellpadding: 0px; font-weight: bold"></table></td></tr>
+		<tr><td id=statusDiv /></tr>
+		<tr><td id=debug /></tr>
 	</table>
 </body>
-
-<script>
-	let map = document.getElementById('mapTable');
-	let statusW = document.getElementById('statusDiv');
-	let HPDisplay = document.getElementById('HP');
-	const viewPortWidth = 16*3;
-	const viewPortHeight = 8*3;
-    let playerXY = {x:viewPortWidth/2-1, y:viewPortHeight/2-1};
-	let terrainY = new Array(viewPortHeight);
-	let activeTile = {x:playerXY.x, y:playerXY.y};
-	let playerHP = 12;
-
-    statusW.innerHTML = "Welcome to Nair";
-
-    HPDisplay.addEventListener('mouseover', function(){
-        statusW.innerHTML = "Your Hit Points mark your physical condition";
-	});
-
-    map.addEventListener('mouseleave', function (){
-        statusW.innerHTML = "You're standing in the R&D clearing of Discordia";
-    });
-    map.addEventListener('click', function (){
-        action(activeTile.x, activeTile.y);
-    });
-	//Build Arrays to hold terrain info
-	for(j=0; j<terrainY.length; j++) {
-    	let terrainX = new Array(viewPortWidth);
-    	for(i=0; i<viewPortWidth; i++){
-    	    terrainX[i] = "";
-		}
-		terrainY[j] = terrainX;
-	}
-
-    //Build PlayerStats
-    function updatePlayerStats(){
-	    HPDisplay.innerHTML = "HP: " +playerHP;
-    }
-    updatePlayerStats();
-
-
-	//Build Viewport
-	for(j=0; j<viewPortHeight; j++){
-		map.insertRow(j);
-		for(i=0; i<viewPortWidth; i++) {
-			map.rows[j].insertCell(i);
-			map.rows[j].cells[i].addEventListener('mouseover', function () {
-				getInfo(this);
-			});
-		}
-	}
-
-	function userInput(event){
-		const k = event.which || event.keyCode;
-
-		if(k==119 || k==97 || k==115 || k==100) move(k); //W, A, S, D
-		//else alert(k);
-	}
-
-	function move(k){
-        if(k == 119) --playerXY.y;
-		else if(k == 97) --playerXY.x;
-		else if(k == 115) ++playerXY.y;
-		else if(k == 100) ++playerXY.x;
-
-		//restrict to visible area
-		if(playerXY.x == viewPortWidth) playerXY.x = viewPortWidth-1;
-		if(playerXY.x < 0) playerXY.x = 0;
-		if(playerXY.y == viewPortHeight) playerXY.y = viewPortHeight-1;
-		if(playerXY.y < 0) playerXY.y = 0;
-
-		draw();
-	}
-
-	function draw(){
-		for(j=0; j<viewPortHeight; j++){
-			for(i=0; i<viewPortWidth; i++){
-			    if(playerXY.x == i && playerXY.y == j) {
-                    map.rows[j].cells[i].style = "color:BurlyWood; cursor:default; font-weight: bold";
-                    map.rows[j].cells[i].innerHTML = "Q";
-                    terrainY[j][i] = " You!";
-				}
-				else {
-                    map.rows[j].cells[i].style = "color:green; cursor:default; ";
-                    map.rows[j].cells[i].innerHTML = "#";
-                    terrainY[j][i] = " a patch of grass";
-				}
-			}
-		}
-	}
-
-	function getInfo(tile) {
-	    activeTile.x = tile.cellIndex;
-	    activeTile.y = tile.parentNode.rowIndex;
-		const terrain = terrainY[tile.parentNode.rowIndex][tile.cellIndex];
-	    statusW.innerHTML = "That is " +terrain;
-	}
-
-	function action(x, y){
-	    statusW.innerHTML = "You attack " +terrainY[y][x];
-	    if(x == playerXY.x && y == playerXY.y) playerHP--;
-	    updatePlayerStats();
-	}
-
-	draw();
-</script>
+<script src="eris.js"></script>
 </html>
