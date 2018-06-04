@@ -1,5 +1,3 @@
-//proxy test 88
-
 let map = document.getElementById('mapTable');
 let statusW = document.getElementById('statusDiv');
 let HPDisplay = document.getElementById('HP');
@@ -9,6 +7,8 @@ let playerXY = {x: viewPortWidth / 2 - 1, y: viewPortHeight / 2 - 1};
 let terrainY = new Array(viewPortHeight);
 let activeTile = {x: playerXY.x, y: playerXY.y};
 let playerHP = 12;
+let k; //userInput key
+let command; //command passed to engine (user intent)
 
 class Goblin{
     constructor(x, y){
@@ -74,7 +74,7 @@ map.addEventListener('mouseleave', function () {
     statusW.innerHTML = "You're standing in the R&D clearing of Discordia";
 });
 map.addEventListener('click', function () {
-    action(activeTile.x, activeTile.y);
+    command = "interact";
 });
 
 //Build Arrays to hold terrain info
@@ -104,10 +104,30 @@ for (j = 0; j < viewPortHeight; j++) {
 }
 
 function userInput(event) {
-    const k = event.which || event.keyCode;
+    k = event.which || event.keyCode;
 
-    if (k == 119 || k == 97 || k == 115 || k == 100) move(k); //W, A, S, D
+    //W, A, S, D
+    if (k == 119 || k == 97 || k == 115 || k == 100) {
+        command = "move";
+    }
     //else alert(k);
+}
+
+function playerIntent() {
+    switch (command) {
+        case "move":
+            move(k);
+            clearCommand();
+            break;
+        case "interact":
+            action(activeTile.x, activeTile.y);
+            clearCommand();
+            break;
+    }
+}
+
+function clearCommand(){
+    command = "";
 }
 
 function move(k) {
@@ -121,11 +141,9 @@ function move(k) {
     if (playerXY.x < 0) playerXY.x = 0;
     if (playerXY.y == viewPortHeight) playerXY.y = viewPortHeight - 1;
     if (playerXY.y < 0) playerXY.y = 0;
-
-    draw();
 }
 
-function draw() {
+function render() {
     for (j = 0; j < viewPortHeight; j++) {
         for (i = 0; i < viewPortWidth; i++) {
             if (playerXY.x == i && playerXY.y == j) {
@@ -146,7 +164,7 @@ function draw() {
         }
     }
 }
-draw();
+render();
 
 function getInfo(tile) {
     activeTile.x = tile.cellIndex;
@@ -177,7 +195,9 @@ function ai(){
 }
 ai();
 
-setInterval(function tick(){
+//Main loop
+setInterval(() => {
     ai();
-    draw();
-}, 333);
+    playerIntent();
+    render();
+}, 200);
