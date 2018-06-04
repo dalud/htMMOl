@@ -31,17 +31,17 @@ class Goblin{
         const distX = Math.pow((playerXY.x - this.x), 2);
         const distY = Math.pow((playerXY.y - this.y), 2);
 
-        if (distX > distY) this.moveX();
-        else this.moveY();
+        if (distX > distY) this.moveX(distX);
+        else this.moveY(distY);
     }
 
-    moveX(){
-        if(playerXY.x < this.x) this.x--;
+    moveX(dist){
+        if(playerXY.x < this.x && dist > 1) this.x--;
         else this.x++;
     }
 
-    moveY(){
-        if(playerXY.y < this.y) this.y--;
+    moveY(dist){
+        if(playerXY.y < this.y && dist > 1) this.y--;
         else if(playerXY.y > this.y) this.y++;
     }
 }

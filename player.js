@@ -13,7 +13,7 @@ class Player{
         if (k == 119 || k == 97 || k == 115 || k == 100) {
             command = "move";
         }
-        else alert(k);
+        //else alert(k);
     }
 
     playerIntent() {
@@ -39,13 +39,13 @@ class Player{
         else if (k == 115) ++playerXY.y;
         else if (k == 100) ++playerXY.x;
 
-        /*
+
         //restrict to visible area
         if (playerXY.x == viewPortWidth) playerXY.x = viewPortWidth - 1;
         if (playerXY.x < 0) playerXY.x = 0;
         if (playerXY.y == viewPortHeight) playerXY.y = viewPortHeight - 1;
         if (playerXY.y < 0) playerXY.y = 0;
-        */
+
     }
 
     action(x, y) {
