@@ -2,62 +2,11 @@ let map = document.getElementById('mapTable');
 let statusW = document.getElementById('statusDiv');
 let HPDisplay = document.getElementById('HP');
 const viewPortWidth = 16 * 3;
-const viewPortHeight = 8 * 3;
-let playerXY = {x: viewPortWidth / 2 - 1, y: viewPortHeight / 2 - 1};
+const viewPortHeight = 8 * 3; //8 because of / 2
+
 let terrainY = new Array(viewPortHeight);
 let activeTile = {x: playerXY.x, y: playerXY.y};
-let playerHP = 12;
-let k; //userInput key
-let command; //command passed to engine (user intent)
-
-class Goblin{
-    constructor(x, y){
-        this.x = x;
-        this.y = y;
-    }
-
-    idle(){
-        const dir = roll(15);
-        switch (dir){
-            case 1:
-                this.x++;
-                break;
-            case 2:
-                this.x--;
-                break;
-            case 3:
-                this.y++;
-                break;
-            case 4:
-                this.y--;
-                break;
-        }
-        //restrict to visible area
-        if (goblin.x == viewPortWidth) goblin.x = viewPortWidth - 1;
-        if (goblin.x < 0) goblin.x = 0;
-        if (goblin.y == viewPortHeight) goblin.y = viewPortHeight - 1;
-        if (goblin.y < 0) goblin.y = 0;
-    }
-
-    aggro() {
-        const distX = Math.pow((playerXY.x - this.x), 2);
-        const distY = Math.pow((playerXY.y - this.y), 2);
-
-        if (distX > distY) this.moveX();
-        else this.moveY();
-    }
-
-    moveX(){
-        if(playerXY.x < this.x) this.x--;
-        else this.x++;
-    }
-
-    moveY(){
-        if(playerXY.y < this.y) this.y--;
-        else if(playerXY.y > this.y) this.y++;
-    }
-}
-
+let player = new Player();
 var goblin = new Goblin(45, 22);
 
 function roll(d){
@@ -66,14 +15,14 @@ function roll(d){
 
 statusW.innerHTML = "Welcome to Nair";
 
-HPDisplay.addEventListener('mouseover', function () {
+HPDisplay.addEventListener('mouseover', () => {
     statusW.innerHTML = "Your Hit Points mark your physical condition";
 });
 
-map.addEventListener('mouseleave', function () {
+map.addEventListener('mouseleave', () => {
     statusW.innerHTML = "You're standing in the R&D clearing of Discordia";
 });
-map.addEventListener('click', function () {
+map.addEventListener('click', () => {
     command = "interact";
 });
 
@@ -103,46 +52,6 @@ for (j = 0; j < viewPortHeight; j++) {
     }
 }
 
-function userInput(event) {
-    k = event.which || event.keyCode;
-
-    //W, A, S, D
-    if (k == 119 || k == 97 || k == 115 || k == 100) {
-        command = "move";
-    }
-    //else alert(k);
-}
-
-function playerIntent() {
-    switch (command) {
-        case "move":
-            move(k);
-            clearCommand();
-            break;
-        case "interact":
-            action(activeTile.x, activeTile.y);
-            clearCommand();
-            break;
-    }
-}
-
-function clearCommand(){
-    command = "";
-}
-
-function move(k) {
-    if (k == 119) --playerXY.y;
-    else if (k == 97) --playerXY.x;
-    else if (k == 115) ++playerXY.y;
-    else if (k == 100) ++playerXY.x;
-
-    //restrict to visible area
-    if (playerXY.x == viewPortWidth) playerXY.x = viewPortWidth - 1;
-    if (playerXY.x < 0) playerXY.x = 0;
-    if (playerXY.y == viewPortHeight) playerXY.y = viewPortHeight - 1;
-    if (playerXY.y < 0) playerXY.y = 0;
-}
-
 function render() {
     for (j = 0; j < viewPortHeight; j++) {
         for (i = 0; i < viewPortWidth; i++) {
@@ -164,20 +73,12 @@ function render() {
         }
     }
 }
-render();
 
 function getInfo(tile) {
     activeTile.x = tile.cellIndex;
     activeTile.y = tile.parentNode.rowIndex;
     const terrain = terrainY[tile.parentNode.rowIndex][tile.cellIndex];
     statusW.innerHTML = "That is a " + terrain;
-}
-
-function action(x, y) {
-    if (x == playerXY.x && y == playerXY.y) statusW.innerHTML = "You tickle yourself";
-    else statusW.innerHTML = "You attack the " + terrainY[y][x];
-
-    updatePlayerStats();
 }
 
 function ai(){
@@ -193,11 +94,10 @@ function ai(){
 
     document.getElementById('debug').innerHTML = dist;
 }
-ai();
 
 //Main loop
 setInterval(() => {
     ai();
-    playerIntent();
+    player.playerIntent();
     render();
 }, 200);
