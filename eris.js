@@ -1,3 +1,5 @@
+//proxy test 88
+
 let map = document.getElementById('mapTable');
 let statusW = document.getElementById('statusDiv');
 let HPDisplay = document.getElementById('HP');
