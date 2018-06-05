@@ -40,7 +40,6 @@ for (let j = 0; j < worldCoordY.length; j++) {
 function updatePlayerStats() {
     HPDisplay.innerHTML = "HP: " + playerHP;
 }
-updatePlayerStats();
 
 //Build Viewport
 for (let j = 0; j < viewPortHeight; j++) {
@@ -99,12 +98,13 @@ function ai(){
     }
     else goblin.idle();
 
-    debug.innerHTML = dist;
+    //debug.innerHTML = dist;
 }
 
 //Main loop
 setInterval(() => {
     ai();
     player.playerIntent();
+    updatePlayerStats();
     render();
 }, 200);

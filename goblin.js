@@ -31,7 +31,10 @@ class Goblin{
         const distX = Math.pow((player.x - this.x), 2);
         const distY = Math.pow((player.y - this.y), 2);
 
-        if(distY >= distX){
+        //debug.innerHTML = "distY: " +distX +" distX: " +distX;
+
+        if(distX < 2 && distY < 2) this.attack();
+        else if(distY >= distX){
             if(player.y < this.y) this.move(1);
             else this.move(3);
         }else if(distY < distX){
@@ -55,5 +58,9 @@ class Goblin{
                 if(!isOccupied(this.x+1, this.y)) this.x++;
                 break;
         }
+    }
+
+    attack(){
+        if(playerHP > 0) playerHP--;
     }
 }
