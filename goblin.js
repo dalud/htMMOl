@@ -1,7 +1,11 @@
+const goblinMaxStamina = 10;
+
 class Goblin{
     constructor(x, y){
         this.x = x;
         this.y = y;
+        this.stamina = 5;
+        this.hp = 5;
     }
 
     idle(){
@@ -61,6 +65,10 @@ class Goblin{
     }
 
     attack(){
-        if(playerHP > 0) playerHP--;
+        if(playerHP > 0 && this.stamina === goblinMaxStamina) {
+            statusW.innerHTML = "The goblin hits you for 1 points of damage";
+            playerHP--;
+            this.stamina = 0;
+        }
     }
 }

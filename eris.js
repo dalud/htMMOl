@@ -36,9 +36,12 @@ for (let j = 0; j < worldCoordY.length; j++) {
     worldCoordY[j] = worldCoordX;
 }
 
-//Build PlayerStats
-function updatePlayerStats() {
+function updatePlayerStatus() {
     HPDisplay.innerHTML = "HP: " + playerHP;
+    if(playerHP < 1) {
+        alive = false;
+        statusW.innerHTML = "You are dead. (Press [F5] to respawn)";
+    }
 }
 
 //Build Viewport
@@ -55,20 +58,21 @@ for (let j = 0; j < viewPortHeight; j++) {
 function render() {
     for (let j = 0; j < viewPortHeight; j++) {
         for (let i = 0; i < viewPortWidth; i++) {
+            if(!alive) map.rows[j].cells[i].style = "color:grey";
             if (player.x === i && player.y === j) {
-                map.rows[j].cells[i].style = "color:BurlyWood; font-weight: bold";
+                if(alive) map.rows[j].cells[i].style = "color:BurlyWood; font-weight: bold";
                 map.rows[j].cells[i].innerHTML = "Q";
                 worldCoordY[j][i].terrain = "You!";
                 worldCoordY[j][i].occupied = true;
             }
             else if(goblin.x === i && goblin.y === j){
-                map.rows[j].cells[i].style = "color:Chartreuse; font-weight: bold";
+                if(alive) map.rows[j].cells[i].style = "color:Chartreuse; font-weight: bold";
                 map.rows[j].cells[i].innerHTML = "g";
                 worldCoordY[j][i].terrain = "goblin";
                 worldCoordY[j][i].occupied = true;
             }
             else {
-                map.rows[j].cells[i].style = "color:DarkGreen;";
+                if(alive) map.rows[j].cells[i].style = "color:DarkGreen";
                 map.rows[j].cells[i].innerHTML = "#";
                 worldCoordY[j][i].terrain = "patch of grass";
                 worldCoordY[j][i].occupied = false;
@@ -88,6 +92,8 @@ function getInfo(tile) {
 }
 
 function ai(){
+    //if(goblin.hp < 1) goblin = null;
+
     //Player <-> Enemy distance
     const x = player.x - goblin.x;
     const y = player.y - goblin.y;
@@ -98,6 +104,8 @@ function ai(){
     }
     else goblin.idle();
 
+    if(goblin.stamina < goblinMaxStamina) goblin.stamina++;
+
     //debug.innerHTML = dist;
 }
 
@@ -105,6 +113,6 @@ function ai(){
 setInterval(() => {
     ai();
     player.playerIntent();
-    updatePlayerStats();
+    updatePlayerStatus();
     render();
 }, 200);
