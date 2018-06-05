@@ -8,40 +8,52 @@ class Goblin{
         const dir = roll(15);
         switch (dir){
             case 1:
-                this.x++;
+                this.move(1);
                 break;
             case 2:
-                this.x--;
+                this.move(2);
                 break;
             case 3:
-                this.y++;
+                this.move(3);
                 break;
             case 4:
-                this.y--;
+                this.move(4);
                 break;
         }
-        //restrict to visible area
-        if (goblin.x == viewPortWidth) goblin.x = viewPortWidth - 1;
-        if (goblin.x < 0) goblin.x = 0;
-        if (goblin.y == viewPortHeight) goblin.y = viewPortHeight - 1;
-        if (goblin.y < 0) goblin.y = 0;
+        //restrict to visible area (will be deprecated)
+        if(this.x === viewPortWidth) this.x = viewPortWidth - 1;
+        if(this.x < 0) goblin.x = 0;
+        if(this.y === viewPortHeight) this.y = viewPortHeight - 1;
+        if(this.y < 0) this.y = 0;
     }
 
     aggro() {
-        const distX = Math.pow((playerXY.x - this.x), 2);
-        const distY = Math.pow((playerXY.y - this.y), 2);
+        const distX = Math.pow((player.x - this.x), 2);
+        const distY = Math.pow((player.y - this.y), 2);
 
-        if (distX > distY) this.moveX(distX);
-        else this.moveY(distY);
+        if(distY >= distX){
+            if(player.y < this.y) this.move(1);
+            else this.move(3);
+        }else if(distY < distX){
+            if(player.x < this.x) this.move(2);
+            else this.move(4);
+        }
     }
 
-    moveX(dist){
-        if(playerXY.x < this.x && dist > 1) this.x--;
-        else this.x++;
-    }
-
-    moveY(dist){
-        if(playerXY.y < this.y && dist > 1) this.y--;
-        else if(playerXY.y > this.y) this.y++;
+    move(direction){
+        switch(direction){
+            case 1:
+                if(!isOccupied(this.x, this.y-1)) this.y--;
+                break;
+            case 2:
+                if(!isOccupied(this.x-1, this.y)) this.x--;
+                break;
+            case 3:
+                if(!isOccupied(this.x, this.y+1)) this.y++;
+                break;
+            case 4:
+                if(!isOccupied(this.x+1, this.y)) this.x++;
+                break;
+        }
     }
 }

@@ -1,16 +1,18 @@
-let playerXY = {x: 23, y: 11};
 let playerHP = 12;
 let k; //userInput key
 let command; //command passed to engine (user intent)
 
 class Player{
-    constructor(){}
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+    }
 
-    userInput(event) {
+    static userInput(event) {
         k = event.which || event.keyCode;
 
         //W, A, S, D
-        if (k == 119 || k == 97 || k == 115 || k == 100) {
+        if (k === 119 || k === 97 || k === 115 || k === 100) {
             command = "move";
         }
         //else alert(k);
@@ -20,36 +22,36 @@ class Player{
         switch (command) {
             case "move":
                 this.move(k);
-                this.clearCommand();
+                Player.clearCommand();
                 break;
             case "interact":
-                this.action(activeTile.x, activeTile.y);
-                this.clearCommand();
+                Player.action(activeTile.x, activeTile.y);
+                Player.clearCommand();
                 break;
         }
     }
 
-    clearCommand() {
+    static clearCommand() {
         command = "";
     }
 
     move(k) {
-        if (k == 119) --playerXY.y;
-        else if (k == 97) --playerXY.x;
-        else if (k == 115) ++playerXY.y;
-        else if (k == 100) ++playerXY.x;
+        if (k === 119 && !isOccupied(this.x, this.y-1)) --player.y;
+        else if (k === 97 && !isOccupied(this.x-1, this.y)) --player.x;
+        else if (k === 115 && !isOccupied(this.x, this.y+1)) ++player.y;
+        else if (k === 100 && !isOccupied(this.x+1, this.y)) ++player.x;
 
 
         //restrict to visible area
-        if (playerXY.x == viewPortWidth) playerXY.x = viewPortWidth - 1;
-        if (playerXY.x < 0) playerXY.x = 0;
-        if (playerXY.y == viewPortHeight) playerXY.y = viewPortHeight - 1;
-        if (playerXY.y < 0) playerXY.y = 0;
+        if (player.x === viewPortWidth) player.x = viewPortWidth - 1;
+        if (player.x < 0) player.x = 0;
+        if (player.y === viewPortHeight) player.y = viewPortHeight - 1;
+        if (player.y < 0) player.y = 0;
 
     }
 
-    action(x, y) {
-        if (x == playerXY.x && y == playerXY.y) statusW.innerHTML = "You tickle yourself";
-        else statusW.innerHTML = "You attack the " + terrainY[y][x];
+    static action(x, y) {
+        if (x === player.x && y === player.y) statusW.innerHTML = "You tickle yourself";
+        else statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain;
     }
 }
