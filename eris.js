@@ -8,7 +8,8 @@ const viewPortHeight = 8 * 3; //8 because of / 2
 let worldCoordY = new Array(viewPortHeight);
 let activeTile = {x: 0, y: 0};
 let player = new Player(23, 11);
-let goblin = new Goblin(45, 22);
+let monsters = new Array();
+monsters.push(new Goblin(45, 22));
 
 function roll(d){
     return Math.ceil(Math.random()*d);
@@ -59,24 +60,26 @@ function render() {
     for (let j = 0; j < viewPortHeight; j++) {
         for (let i = 0; i < viewPortWidth; i++) {
             if(!alive) map.rows[j].cells[i].style = "color:grey";
+
             if (player.x === i && player.y === j) {
                 if(alive) map.rows[j].cells[i].style = "color:BurlyWood; font-weight: bold";
                 map.rows[j].cells[i].innerHTML = "Q";
                 worldCoordY[j][i].terrain = "You!";
                 worldCoordY[j][i].occupied = true;
-            }
-            else if(goblin.x === i && goblin.y === j){
-                if(alive) map.rows[j].cells[i].style = "color:Chartreuse; font-weight: bold";
-                map.rows[j].cells[i].innerHTML = "g";
-                worldCoordY[j][i].terrain = "goblin";
-                worldCoordY[j][i].occupied = true;
-            }
-            else {
+            }else {
                 if(alive) map.rows[j].cells[i].style = "color:DarkGreen";
                 map.rows[j].cells[i].innerHTML = "#";
                 worldCoordY[j][i].terrain = "patch of grass";
                 worldCoordY[j][i].occupied = false;
             }
+            monsters.forEach(monster => {
+                if (monster.x === i && monster.y === j) {
+                    if (alive) map.rows[j].cells[i].style = "color:Chartreuse; font-weight: bold";
+                    map.rows[j].cells[i].innerHTML = "g";
+                    worldCoordY[j][i].terrain = "goblin";
+                    worldCoordY[j][i].occupied = true;
+                }
+            });
         }
     }
 }
@@ -92,21 +95,22 @@ function getInfo(tile) {
 }
 
 function ai(){
-    //if(goblin.hp < 1) goblin = null;
 
-    //Player <-> Enemy distance
-    const x = player.x - goblin.x;
-    const y = player.y - goblin.y;
-    const dist = Math.sqrt(Math.pow(x, 2)+Math.pow(y, 2));
+    monsters.forEach(monster => {
+        if(monster.hp < 1) monsters.splice(monster);
 
-    if(dist < 20){
-        goblin.aggro();
-    }
-    else goblin.idle();
+        //Player <-> Enemy distance
+        const x = player.x - monster.x;
+        const y = player.y - monster.y;
+        const dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-    if(goblin.stamina < goblinMaxStamina) goblin.stamina++;
+        if (dist < 20) {
+            monster.aggro();
+        }
+        else monster.idle();
 
-    //debug.innerHTML = dist;
+        if (monster.stamina < goblinMaxStamina) monster.stamina++;
+    });
 }
 
 //Main loop

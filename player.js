@@ -3,8 +3,8 @@ let k; //userInput key
 let command; //command passed to engine (user intent)
 let alive;
 
-class Player{
-    constructor(x, y){
+class Player {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
         alive = true;
@@ -22,15 +22,14 @@ class Player{
     }
 
     playerIntent() {
-        if(alive){
+        if (alive) {
             switch (command) {
                 case "move":
                     this.move(k);
-                    //this.clearCommand();
                     break;
+
                 case "interact":
                     this.action(activeTile.x, activeTile.y);
-                    //this.clearCommand();
                     break;
             }
         }
@@ -38,10 +37,10 @@ class Player{
     }
 
     move(k) {
-        if (k === 119 && !isOccupied(this.x, this.y-1)) --this.y;
-        else if (k === 97 && !isOccupied(this.x-1, this.y)) --this.x;
-        else if (k === 115 && !isOccupied(this.x, this.y+1)) ++this.y;
-        else if (k === 100 && !isOccupied(this.x+1, this.y)) ++this.x;
+        if (k === 119 && !isOccupied(this.x, this.y - 1)) --this.y;
+        else if (k === 97 && !isOccupied(this.x - 1, this.y)) --this.x;
+        else if (k === 115 && !isOccupied(this.x, this.y + 1)) ++this.y;
+        else if (k === 100 && !isOccupied(this.x + 1, this.y)) ++this.x;
 
 
         //restrict to visible area
@@ -55,8 +54,10 @@ class Player{
     action(x, y) {
         if (x === this.x && y === this.y) statusW.innerHTML = "You tickle yourself";
         else {
-            statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain +" for 1 points of damage";
-            if(x === goblin.x && y === goblin.y) goblin.hp--;
+            statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain + " for 1 points of damage";
+            monsters.forEach(monster => {
+                if (x === monster.x && y === monster.y) monster.hp--;
+            });
         }
     }
 }
