@@ -1,6 +1,6 @@
 let map = document.getElementById('mapTable');
 let statusW = document.getElementById('statusDiv');
-let HPDisplay = document.getElementById('HP');
+let statsDisplay = document.getElementById('stats');
 let debug = document.getElementById('debug');
 const viewPortWidth = 16 * 3;
 const viewPortHeight = 8 * 3; //8 because of / 2
@@ -17,13 +17,10 @@ function roll(d){
 
 statusW.innerHTML = "Welcome to Nair";
 
-HPDisplay.addEventListener('mouseover', () => {
-    statusW.innerHTML = "Your Hit Points mark your physical condition";
-});
-
 map.addEventListener('mouseleave', () => {
     statusW.innerHTML = "You're standing in the R&D clearing of Discordia";
 });
+
 map.addEventListener('click', () => {
     command = "interact";
 });
@@ -38,7 +35,13 @@ for (let j = 0; j < worldCoordY.length; j++) {
 }
 
 function updatePlayerStatus() {
-    HPDisplay.innerHTML = "HP: " + playerHP;
+    let hpString;
+    if(playerHP < 100) hpString = "HP:  ";
+    else if(playerHP < 10) hpString = "HP:   ";
+    else hpString = "HP: ";
+
+    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0'>" +hpString +playerHP +"\t<span style='color: green'>Stamina: " +stamina +"</span>" +"</pre>" ;
+    //staminaDisplay.innerText = "Stamina: " +stamina;
     if(playerHP < 1) {
         alive = false;
         statusW.innerHTML = "You are dead. (Press [F5] to respawn)";
@@ -98,7 +101,7 @@ function ai(){
     monsters.forEach(monster => {
         if(monster.hp < 1) monsters.splice(monster);
 
-        if (calculateDistance(monster.x, monster.y, player.x, player.y) < 20) {
+        if (calculateDistance(monster.x, monster.y, player.x, player.y) < 15) {
             monster.aggro();
         }
         else monster.idle();

@@ -2,6 +2,7 @@ let playerHP = 12;
 let k; //userInput key
 let command; //command passed to engine (user intent)
 let alive;
+let stamina;
 
 class Player {
     constructor(x, y) {
@@ -9,6 +10,7 @@ class Player {
         this.y = y;
         alive = true;
         this.range = 2;
+        stamina = 10;
     }
 
     static userInput(event) {
@@ -53,8 +55,12 @@ class Player {
     }
 
     action(x, y) {
+        //Self
         if (x === this.x && y === this.y) statusW.innerHTML = "You scratch yourself";
+
+        //Attack
         else if(calculateDistance(this.x, this.y, x, y) < this.range) {
+            stamina -= 3;
             statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain + " for 1 points of damage";
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp--;
