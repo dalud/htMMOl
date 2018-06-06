@@ -6,6 +6,7 @@ class Goblin{
         this.y = y;
         this.stamina = 5;
         this.hp = 5;
+        this.range = 2;
     }
 
     idle(){
@@ -32,12 +33,12 @@ class Goblin{
     }
 
     aggro() {
+        //for path finding. will be deprecated. A*?
         const distX = Math.pow((player.x - this.x), 2);
         const distY = Math.pow((player.y - this.y), 2);
 
-        //debug.innerHTML = "distY: " +distX +" distX: " +distX;
-
-        if(distX < 2 && distY < 2) this.attack();
+        if(calculateDistance(this.x, this.y, player.x, player.y) < this.range) this.attack();
+        //for path finding. will be deprecated. A*?
         else if(distY >= distX){
             if(player.y < this.y) this.move(1);
             else this.move(3);

@@ -8,7 +8,7 @@ const viewPortHeight = 8 * 3; //8 because of / 2
 let worldCoordY = new Array(viewPortHeight);
 let activeTile = {x: 0, y: 0};
 let player = new Player(23, 11);
-let monsters = new Array();
+let monsters = [];
 monsters.push(new Goblin(45, 22));
 
 function roll(d){
@@ -95,22 +95,20 @@ function getInfo(tile) {
 }
 
 function ai(){
-
     monsters.forEach(monster => {
         if(monster.hp < 1) monsters.splice(monster);
 
-        //Player <-> Enemy distance
-        const x = player.x - monster.x;
-        const y = player.y - monster.y;
-        const dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-
-        if (dist < 20) {
+        if (calculateDistance(monster.x, monster.y, player.x, player.y) < 20) {
             monster.aggro();
         }
         else monster.idle();
 
         if (monster.stamina < goblinMaxStamina) monster.stamina++;
     });
+}
+
+function calculateDistance(x, y, x2, y2){
+    return Math.sqrt(Math.pow((x-x2), 2) + Math.pow((y-y2), 2));
 }
 
 //Main loop

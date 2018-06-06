@@ -8,6 +8,7 @@ class Player {
         this.x = x;
         this.y = y;
         alive = true;
+        this.range = 2;
     }
 
     static userInput(event) {
@@ -52,12 +53,12 @@ class Player {
     }
 
     action(x, y) {
-        if (x === this.x && y === this.y) statusW.innerHTML = "You tickle yourself";
-        else {
+        if (x === this.x && y === this.y) statusW.innerHTML = "You scratch yourself";
+        else if(calculateDistance(this.x, this.y, x, y) < this.range) {
             statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain + " for 1 points of damage";
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp--;
             });
-        }
+        }else statusW.innerHTML = "You can't reach that far";
     }
 }
