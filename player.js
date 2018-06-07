@@ -3,6 +3,8 @@ let k; //userInput key
 let command; //command passed to engine (user intent)
 let alive;
 let stamina;
+let maxStamina;
+let cost; //stamina cost of swinging a weapon
 
 class Player {
     constructor(x, y) {
@@ -11,6 +13,8 @@ class Player {
         alive = true;
         this.range = 2;
         stamina = 10;
+        maxStamina = stamina;
+        cost = 3;
     }
 
     static userInput(event) {
@@ -34,6 +38,9 @@ class Player {
                 case "interact":
                     this.action(activeTile.x, activeTile.y);
                     break;
+                default:
+                    if(stamina < maxStamina) stamina++;
+                    break;
             }
         }
         command = "";
@@ -45,26 +52,26 @@ class Player {
         else if (k === 115 && !isOccupied(this.x, this.y + 1)) ++this.y;
         else if (k === 100 && !isOccupied(this.x + 1, this.y)) ++this.x;
 
-
         //restrict to visible area
         if (this.x === viewPortWidth) this.x = viewPortWidth - 1;
         if (this.x < 0) this.x = 0;
         if (this.y === viewPortHeight) this.y = viewPortHeight - 1;
         if (this.y < 0) this.y = 0;
-
     }
 
     action(x, y) {
         //Self
         if (x === this.x && y === this.y) statusW.innerHTML = "You scratch yourself";
 
+        else if(stamina < cost) statusW.innerHTML = "You are exhausted";
+
         //Attack
         else if(calculateDistance(this.x, this.y, x, y) < this.range) {
-            stamina -= 3;
             statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain + " for 1 points of damage";
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp--;
             });
+            stamina -= cost;
         }else statusW.innerHTML = "You can't reach that far";
     }
 }

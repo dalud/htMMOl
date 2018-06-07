@@ -101,7 +101,7 @@ function ai(){
     monsters.forEach(monster => {
         if(monster.hp < 1) monsters.splice(monster);
 
-        if (calculateDistance(monster.x, monster.y, player.x, player.y) < 15) {
+        if (calculateDistance(monster.x, monster.y, player.x, player.y) < 18) {
             monster.aggro();
         }
         else monster.idle();

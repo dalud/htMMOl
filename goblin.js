@@ -38,6 +38,7 @@ class Goblin{
         const distY = Math.pow((player.y - this.y), 2);
 
         if(calculateDistance(this.x, this.y, player.x, player.y) < this.range) this.attack();
+
         //for path finding. will be deprecated. A*?
         else if(distY >= distX){
             if(player.y < this.y) this.move(1);
