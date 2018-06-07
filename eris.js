@@ -35,12 +35,12 @@ for (let j = 0; j < worldCoordY.length; j++) {
 }
 
 function updatePlayerStatus() {
-    let hpString;
+    /*let hpString;
     if(playerHP < 100) hpString = "HP:  ";
     else if(playerHP < 10) hpString = "HP:   ";
-    else hpString = "HP: ";
+    else hpString = "HP: ";*/
 
-    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0'>" +hpString +Math.floor(playerHP) +"\t<span style='color: green'>Stamina: " +Math.floor(stamina) +"</span>" +"</pre>" ;
+    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0; text-align: center;'>HP: " +Math.floor(playerHP) +"<span style='color: green'>\tStamina: " +Math.floor(stamina) +"</span>" +"<span style='text-align: right; color: blueviolet'>\t\tExp: " +xp +"</span>" +"</pre>" ;
     //staminaDisplay.innerText = "Stamina: " +stamina;
     if(playerHP < 1) {
         alive = false;
@@ -99,7 +99,10 @@ function getInfo(tile) {
 
 function ai(){
     monsters.forEach(monster => {
-        if(monster.hp < 1) monsters.splice(monster);
+        if(monster.hp < 1) {
+            monsters.splice(monster);
+            xp++;
+        }
 
         if (calculateDistance(monster.x, monster.y, player.x, player.y) < 18) {
             monster.aggro();

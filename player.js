@@ -6,6 +6,7 @@ let alive = true;
 let stamina;
 let maxStamina;
 let cost = 3; //stamina cost of swinging a weapon
+let xp = 0;
 
 class Player {
     constructor(x, y) {
