@@ -40,7 +40,7 @@ function updatePlayerStatus() {
     else if(playerHP < 10) hpString = "HP:   ";
     else hpString = "HP: ";
 
-    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0'>" +hpString +playerHP +"\t<span style='color: green'>Stamina: " +stamina +"</span>" +"</pre>" ;
+    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0'>" +hpString +Math.floor(playerHP) +"\t<span style='color: green'>Stamina: " +Math.floor(stamina) +"</span>" +"</pre>" ;
     //staminaDisplay.innerText = "Stamina: " +stamina;
     if(playerHP < 1) {
         alive = false;
@@ -67,19 +67,19 @@ function render() {
             if (player.x === i && player.y === j) {
                 if(alive) map.rows[j].cells[i].style = "color:BurlyWood; font-weight: bold";
                 map.rows[j].cells[i].innerHTML = "Q";
-                worldCoordY[j][i].terrain = "You!";
+                worldCoordY[j][i].terrain = "That's you!";
                 worldCoordY[j][i].occupied = true;
             }else {
                 if(alive) map.rows[j].cells[i].style = "color:DarkGreen";
                 map.rows[j].cells[i].innerHTML = "#";
-                worldCoordY[j][i].terrain = "patch of grass";
+                worldCoordY[j][i].terrain = "a patch of grass";
                 worldCoordY[j][i].occupied = false;
             }
             monsters.forEach(monster => {
                 if (monster.x === i && monster.y === j) {
                     if (alive) map.rows[j].cells[i].style = "color:Chartreuse; font-weight: bold";
                     map.rows[j].cells[i].innerHTML = "g";
-                    worldCoordY[j][i].terrain = "goblin";
+                    worldCoordY[j][i].terrain = "a goblin";
                     worldCoordY[j][i].occupied = true;
                 }
             });
@@ -94,7 +94,7 @@ function isOccupied(x, y){
 function getInfo(tile) {
     activeTile.x = tile.cellIndex;
     activeTile.y = tile.parentNode.rowIndex;
-    statusW.innerHTML = "That is a " + worldCoordY[tile.parentNode.rowIndex][tile.cellIndex].terrain;
+    statusW.innerHTML = worldCoordY[tile.parentNode.rowIndex][tile.cellIndex].terrain;
 }
 
 function ai(){

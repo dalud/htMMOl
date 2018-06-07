@@ -1,16 +1,18 @@
-let playerHP = 12;
+let playerHP;
+let maxHP = 12;
 let k; //userInput key
 let command; //command passed to engine (user intent)
-let alive;
+let alive = true;
 let stamina;
 let maxStamina;
-let cost; //stamina cost of swinging a weapon
+let cost = 3; //stamina cost of swinging a weapon
 
 class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
         alive = true;
+        playerHP = maxHP;
         this.range = 2;
         stamina = 10;
         maxStamina = stamina;
@@ -38,10 +40,9 @@ class Player {
                 case "interact":
                     this.action(activeTile.x, activeTile.y);
                     break;
-                default:
-                    if(stamina < maxStamina) stamina++;
-                    break;
             }
+            if(stamina < maxStamina) stamina += .2;
+            else if(playerHP < maxHP) playerHP += .03;
         }
         command = "";
     }
@@ -67,11 +68,11 @@ class Player {
 
         //Attack
         else if(calculateDistance(this.x, this.y, x, y) < this.range) {
-            statusW.innerHTML = "You attack the " + worldCoordY[y][x].terrain + " for 1 points of damage";
+            statusW.innerHTML = "You attack " + worldCoordY[y][x].terrain + " for 1 points of damage";
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp--;
             });
             stamina -= cost;
-        }else statusW.innerHTML = "You can't reach that far";
+        }else statusW.innerHTML = "You can't reach that";
     }
 }
