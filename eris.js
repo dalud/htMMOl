@@ -10,6 +10,7 @@ let activeTile = {x: 0, y: 0};
 let player = new Player(23, 11);
 let monsters = [];
 monsters.push(new Goblin(45, 22));
+monsters.push(new Goblin(1, 1));
 
 function roll(d){
     return Math.ceil(Math.random()*d);
@@ -100,7 +101,7 @@ function getInfo(tile) {
 function ai(){
     monsters.forEach(monster => {
         if(monster.hp < 1) {
-            monsters.splice(monster);
+            monsters.splice(monsters.indexOf(monster));
             xp++;
         }
 
