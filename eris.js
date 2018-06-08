@@ -36,13 +36,8 @@ for (let j = 0; j < worldCoordY.length; j++) {
 }
 
 function updatePlayerStatus() {
-    /*let hpString;
-    if(playerHP < 100) hpString = "HP:  ";
-    else if(playerHP < 10) hpString = "HP:   ";
-    else hpString = "HP: ";*/
-
     statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0; text-align: center;'>HP: " +Math.floor(playerHP) +"<span style='color: green'>\tStamina: " +Math.floor(stamina) +"</span>" +"<span style='text-align: right; color: blueviolet'>\t\tExp: " +xp +"</span>" +"</pre>" ;
-    //staminaDisplay.innerText = "Stamina: " +stamina;
+
     if(playerHP < 1) {
         alive = false;
         statusW.innerHTML = "You are dead. (Press [F5] to respawn)";
