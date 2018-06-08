@@ -7,6 +7,8 @@ class Goblin{
         this.stamina = 5;
         this.hp = 5;
         this.range = 2;
+        this.lootValue = 3;
+        this.xpWorth = 1;
     }
 
     idle(){

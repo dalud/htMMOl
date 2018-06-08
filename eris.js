@@ -10,9 +10,9 @@ let player = new Player(23, 11);
 let monsters = [];
 let loot = [];
 
-loot.push({x: 12, y:12, value: 1});
-//monsters.push(new Goblin(45, 22));
-//monsters.push(new Goblin(1, 1));
+//loot.push({x: 12, y:12, value: 1});
+monsters.push(new Goblin(45, 22));
+monsters.push(new Goblin(1, 1));
 
 function roll(d){
     return Math.ceil(Math.random()*d);
@@ -42,15 +42,16 @@ function updatePlayerStatus() {
 
     if(playerHP < 1) {
         alive = false;
+        player.gold = 0;
         statusW.innerHTML = "You are dead. (Press [F5] to respawn)";
     }
 
     loot.forEach(drop => {
         if(player.x === drop.x && player.y === drop.y){
-            let gold = roll(3)*drop.value;
+            let gold = roll(drop.value);
             statusW.innerHTML = "You pick up " +gold +" pieces of gold";
             player.gold += gold;
-            loot.splice(loot.indexOf(drop));
+            loot.splice(loot.indexOf(drop), 1);
         }
     })
 }
@@ -120,8 +121,9 @@ function getInfo(tile) {
 function ai(){
     monsters.forEach(monster => {
         if(monster.hp < 1) {
-            monsters.splice(monsters.indexOf(monster));
-            xp++;
+            loot.push({x: monster.x, y: monster.y, value: monster.lootValue});
+            xp += monster.xpWorth;
+            monsters.splice(monsters.indexOf(monster), 1);
         }
 
         if (calculateDistance(monster.x, monster.y, player.x, player.y) < 18) {
