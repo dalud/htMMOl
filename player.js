@@ -18,6 +18,7 @@ class Player {
         stamina = 10;
         maxStamina = stamina;
         cost = 3;
+        this.gold = 0;
     }
 
     static userInput(event) {
