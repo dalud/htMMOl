@@ -4,7 +4,7 @@ let statsDisplay = document.getElementById('stats');
 let debug = document.getElementById('debug');
 const viewPortWidth = 16 * 3;
 const viewPortHeight = 8 * 3; //8 because of / 2
-let worldCoordY = [];
+let tileInfo = [];
 let activeTile = {x: 0, y: 0};
 let player = new Player(23, 11);
 let monsters = [];
@@ -25,13 +25,13 @@ map.addEventListener('click', () => {
     command = "interact";
 });
 
-//Build Arrays to hold terrain info
+//Build Arrays to hold tile info
 for (let j = 0; j < viewPortHeight; j++) {
-    let worldCoordX = [];
+    let x = [];
     for (let i = 0; i < viewPortWidth; i++) {
-        worldCoordX[i] = {terrain: "", occupied: false};
+        x[i] = {terrain: "", occupied: false};
     }
-    worldCoordY[j] = worldCoordX;
+    tileInfo[j] = x;
 }
 
 function updatePlayerStatus() {
@@ -62,30 +62,24 @@ function render() {
             //render terrain
             if(alive) map.rows[j].cells[i].style = world[i][j].style;
             map.rows[j].cells[i].innerHTML = world[i][j].symbol;
+            tileInfo[j][i].terrain = world[i][j].terrain;
+            tileInfo[j][i].occupied = world[i][j].occupied;
 
             //render player
             if (player.x === i && player.y === j) {
                 if (alive) map.rows[j].cells[i].style = "color:BurlyWood; font-weight: bold";
                 map.rows[j].cells[i].innerHTML = "Q";
-                //worldCoordY[j][i].terrain = "That's you!";
-                //worldCoordY[j][i].occupied = true;
+                tileInfo[j][i].terrain = "That's you!";
+                tileInfo[j][i].occupied = true;
             }
-                /*
-                }else {
-                    if(alive) map.rows[j].cells[i].style = "color:DarkGreen";
-                    map.rows[j].cells[i].innerHTML = "#";
-                    worldCoordY[j][i].terrain = "a patch of grass";
-                    worldCoordY[j][i].occupied = false;
-                }
-                */
 
             //render monsters
             monsters.forEach(monster => {
                 if (monster.x === i && monster.y === j) {
                     if (alive) map.rows[j].cells[i].style = "color:Chartreuse; font-weight: bold";
                     map.rows[j].cells[i].innerHTML = "g";
-                    //worldCoordY[j][i].terrain = "a goblin";
-                    //worldCoordY[j][i].occupied = true;
+                    tileInfo[j][i].terrain = "a goblin";
+                    tileInfo[j][i].occupied = true;
                 }
             });
 
@@ -94,13 +88,13 @@ function render() {
 }
 
 function isOccupied(x, y){
-    return worldCoordY[y][x].occupied;
+    return tileInfo[y][x].occupied;
 }
 
 function getInfo(tile) {
     activeTile.x = tile.cellIndex;
     activeTile.y = tile.parentNode.rowIndex;
-    statusW.innerHTML = worldCoordY[tile.parentNode.rowIndex][tile.cellIndex].terrain;
+    statusW.innerHTML = tileInfo[tile.parentNode.rowIndex][tile.cellIndex].terrain;
 }
 
 function ai(){

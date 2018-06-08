@@ -1,8 +1,8 @@
 let world = [];
 
-for(let i=0; i<16*3; i++){
+for(let i=0; i<viewPortWidth; i++){
     let y = [];
-    for(let j=0; j<8*3; j++) {
+    for(let j=0; j<viewPortHeight; j++) {
         y[j] = {
             occupied: false,
             terrain: "a patch of grass",

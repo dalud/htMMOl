@@ -69,7 +69,7 @@ class Player {
 
         //Attack
         else if(calculateDistance(this.x, this.y, x, y) < this.range) {
-            statusW.innerHTML = "You attack " + worldCoordY[y][x].terrain + " for 1 points of damage";
+            statusW.innerHTML = "You attack " + tileInfo[y][x].terrain + " for 1 points of damage";
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp--;
             });
