@@ -7,7 +7,7 @@ for(let i=0; i<16*3; i++){
             occupied: false,
             terrain: "a patch of grass",
             symbol: "#",
-            color: "color:DarkGreen"
+            style: "color:DarkGreen"
         }
     }world[i] = y;
 }
