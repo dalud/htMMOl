@@ -1,14 +1,40 @@
-let world = [];
+let world = []; //terrain layer
+let objects = []; //object layer
+const sizeX = 160, sizeY = 90;
+let counter = 0;
 
-for(let i=0; i<viewPortWidth; i++){
-    let y = [];
-    for(let j=0; j<viewPortHeight; j++) {
-        y[j] = {
-            occupied: false,
-            terrain: "a patch of grass",
-            symbol: "#",
-            style: "color:DarkGreen"
+for(let j=0; j<sizeY; j++){
+    let x = [];
+    let oX = [];
+
+    for(let i=0; i<sizeX; i++) {
+        if(roll(20) === 1) {
+            x[i] = {
+                occupied: true,
+                terrain: "a tree",
+                symbol: "|",//counter,
+                style: "color:Chocolate",
+                id: counter
+            }
+        }else{
+            x[i] = {
+                occupied: false,
+                terrain: "a patch of grass",
+                symbol: "#",//counter,
+                style: "color:DarkGreen",
+                id: counter
+            }
         }
-    }world[i] = y;
+
+        oX[i] = {
+            occupied: false,
+            terrain: null,
+            symbol: null,//counter,
+            style: null
+        }
+        counter++;
+    }
+    world[j] = x;
+    objects[j] = oX;
 }
-//console.log(world);
+//console.log(objects[23].length);

@@ -4,19 +4,14 @@ let statsDisplay = document.getElementById('stats');
 let debug = document.getElementById('debug');
 const viewPortWidth = 16 * 3;
 const viewPortHeight = 8 * 3; //8 because of / 2
-let tileInfo = [];
 let activeTile = {x: 0, y: 0};
-let player = new Player(23, 11);
+let player = new Player(sizeX/2, sizeY/2);
+let anchor = {x: player.x - viewPortWidth/2, y: player.y - viewPortHeight/2}; //viewport TOP LEFT anchor
 let monsters = [];
 let loot = [];
 
-//loot.push({x: 12, y:12, value: 1});
-monsters.push(new Goblin(45, 22));
-monsters.push(new Goblin(1, 1));
-
-function roll(d){
-    return Math.ceil(Math.random()*d);
-}
+monsters.push(new Goblin(62, 35));
+monsters.push(new Goblin(98, 54));
 
 statusW.innerHTML = "Welcome to Nair";
 
@@ -28,17 +23,8 @@ map.addEventListener('click', () => {
     command = "interact";
 });
 
-//Build Arrays to hold tile info
-for (let j = 0; j < viewPortHeight; j++) {
-    let x = [];
-    for (let i = 0; i < viewPortWidth; i++) {
-        x[i] = {terrain: "", occupied: false};
-    }
-    tileInfo[j] = x;
-}
-
 function updatePlayerStatus() {
-    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0; text-align: center;'>HP: " +Math.floor(playerHP) +"<span style='color: green'>\tStamina: " +Math.floor(stamina) +"</span>" +"<span style='text-align: right; color: blueviolet'>\t\tExp: " +xp +"</span>" +"<span style='text-align: right; color: gold'>\tGold: " +player.gold +"</span>" +"</pre>" ;
+    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0; text-align: center;'>HP: " +Math.floor(playerHP) +"<span style='color: green'>\tStamina: " +Math.floor(stamina) +"</span>" +"<span style='text-align: right; color: blueviolet'>\t\tExp: " +xp +"</span>" +"<span style='text-align: right; color: #ffbd00'>\tGold: " +player.gold +"</span>" +"</pre>" ;
 
     if(playerHP < 1) {
         alive = false;
@@ -69,39 +55,42 @@ for (let j = 0; j < viewPortHeight; j++) {
 
 function render() {
     for (let j = 0; j < viewPortHeight; j++) {
+        let y = anchor.y + j; //raytrace viewport to world
+
         for (let i = 0; i < viewPortWidth; i++) {
+            let x = anchor.x + i; //raytrace viewport to world
+
             if(!alive) map.rows[j].cells[i].style = "color:grey";
 
             //render terrain
-            if(alive) map.rows[j].cells[i].style = world[i][j].style;
-            map.rows[j].cells[i].innerHTML = world[i][j].symbol;
-            tileInfo[j][i].terrain = world[i][j].terrain;
-            tileInfo[j][i].occupied = world[i][j].occupied;
+            if(alive) map.rows[j].cells[i].style = world[y][x].style; //
+            map.rows[j].cells[i].innerHTML = world[y][x].symbol;
+            objects[y][x].terrain = null;
 
             //render loot
             loot.forEach(drop => {
-                if(drop.x === i && drop.y === j){
-                    if(alive) map.rows[j].cells[i].style = "color:Gold";
+                if(drop.x === x && drop.y === y){
+                    if(alive) map.rows[j].cells[i].style = "color:FFBD00";
                     map.rows[j].cells[i].innerHTML = "*";
-                    tileInfo[j][i].terrain = "loot";
+                    objects[y][x].terrain = "some loot";
                 }
             });
 
             //render player
-            if (player.x === i && player.y === j) {
+            if (i === viewPortWidth/2 && j === viewPortHeight/2) {
                 if (alive) map.rows[j].cells[i].style = "color:BurlyWood";
                 map.rows[j].cells[i].innerHTML = "Q";
-                tileInfo[j][i].terrain = "That's you!";
-                tileInfo[j][i].occupied = true;
+                objects[y][x].terrain = "That's you!";
+                objects[y][x].occupied = true;
             }
 
             //render monsters
             monsters.forEach(monster => {
-                if (monster.x === i && monster.y === j) {
+                if (monster.x === x && monster.y === y) {
                     if (alive) map.rows[j].cells[i].style = "color:Chartreuse";
                     map.rows[j].cells[i].innerHTML = "g";
-                    tileInfo[j][i].terrain = "a goblin";
-                    tileInfo[j][i].occupied = true;
+                    objects[y][x].terrain = "a goblin";
+                    objects[y][x].occupied = true;
                 }
             });
         }
@@ -109,13 +98,17 @@ function render() {
 }
 
 function isOccupied(x, y){
-    return tileInfo[y][x].occupied;
+    return world[y][x].occupied;
 }
 
 function getInfo(tile) {
     activeTile.x = tile.cellIndex;
     activeTile.y = tile.parentNode.rowIndex;
-    if(alive) statusW.innerHTML = tileInfo[tile.parentNode.rowIndex][tile.cellIndex].terrain;
+    if(alive){
+        if(objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain) statusW.innerHTML = objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
+        else statusW.innerHTML = world[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
+    }
+    debug.innerHTML = "x: " +(anchor.x+activeTile.x) +", y: " +(anchor.y+activeTile.y);
 }
 
 function ai(){

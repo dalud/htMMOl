@@ -40,26 +40,32 @@ class Player {
                     break;
 
                 case "interact":
-                    this.action(activeTile.x, activeTile.y);
+                    this.action(activeTile.x+anchor.x, activeTile.y+anchor.y);
                     break;
             }
             if(stamina < maxStamina) stamina += .2;
             else if(playerHP < maxHP) playerHP += .03;
         }
-        command = "";
+        command = null;
     }
 
     move(k) {
-        if (k === 119 && !isOccupied(this.x, this.y - 1)) --this.y;
-        else if (k === 97 && !isOccupied(this.x - 1, this.y)) --this.x;
-        else if (k === 115 && !isOccupied(this.x, this.y + 1)) ++this.y;
-        else if (k === 100 && !isOccupied(this.x + 1, this.y)) ++this.x;
-
-        //restrict to visible area
-        if (this.x === viewPortWidth) this.x = viewPortWidth - 1;
-        if (this.x < 0) this.x = 0;
-        if (this.y === viewPortHeight) this.y = viewPortHeight - 1;
-        if (this.y < 0) this.y = 0;
+        if (k === 119 && !isOccupied(this.x, this.y - 1)){
+            --this.y;
+            --anchor.y;
+        }
+        else if (k === 97 && !isOccupied(this.x - 1, this.y)){
+            --this.x;
+            --anchor.x;
+        }
+        else if (k === 115 && !isOccupied(this.x, this.y + 1)){
+            ++this.y;
+            ++anchor.y;
+        }
+        else if (k === 100 && !isOccupied(this.x + 1, this.y)){
+            ++this.x;
+            ++anchor.x;
+        }
     }
 
     action(x, y) {
@@ -70,7 +76,7 @@ class Player {
 
         //Attack
         else if(calculateDistance(this.x, this.y, x, y) < this.range) {
-            statusW.innerHTML = "You attack " + tileInfo[y][x].terrain + " for 1 points of damage";
+            statusW.innerHTML = "You attack " + objects[y][x].terrain + " for 1 points of damage";
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp--;
             });

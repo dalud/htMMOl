@@ -27,11 +27,6 @@ class Goblin{
                 this.move(4);
                 break;
         }
-        //restrict to visible area (will be deprecated)
-        if(this.x === viewPortWidth) this.x = viewPortWidth - 1;
-        if(this.x < 0) this.x = 0;
-        if(this.y === viewPortHeight) this.y = viewPortHeight - 1;
-        if(this.y < 0) this.y = 0;
     }
 
     aggro() {
