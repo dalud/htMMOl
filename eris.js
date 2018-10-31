@@ -97,10 +97,6 @@ function render() {
     }
 }
 
-function isOccupied(x, y){
-    return world[y][x].occupied;
-}
-
 function getInfo(tile) {
     activeTile.x = tile.cellIndex;
     activeTile.y = tile.parentNode.rowIndex;
