@@ -1,7 +1,10 @@
 let world = []; //terrain layer
 let objects = []; //object layer
-const sizeX = 160, sizeY = 90;
+const sizeX = 1600, sizeY = 900;
 let counter = 0;
+
+// y-axis points down
+// x right
 
 for(let j=0; j<sizeY; j++){
     let x = [];

@@ -5,8 +5,9 @@ let command; //command passed to engine (user intent)
 let alive = true;
 let stamina;
 let maxStamina;
-let cost = 3; //stamina cost of swinging a weapon
+let cost; //stamina cost of swinging a weapon
 let xp = 0;
+const damage = 2;
 
 class Player {
     constructor(x, y) {
@@ -14,10 +15,10 @@ class Player {
         this.y = y;
         alive = true;
         playerHP = maxHP;
-        this.range = 2;
+        this.range = 1;
         stamina = 10;
         maxStamina = stamina;
-        cost = 3;
+        cost = 2;
         this.gold = 0;
     }
 
@@ -26,7 +27,6 @@ class Player {
 
         //W, A, S, D
         if (k === 119 || k === 97 || k === 115 || k === 100) {
-            //statusW.innerHTML = alive;
             command = "move";
         }
         //else alert(k);
@@ -50,19 +50,19 @@ class Player {
     }
 
     move(k) {
-        if (k === 119 && !isOccupied(this.x, this.y - 1)){
+        if (k === 119 && !isOccupied(this.x, this.y - 1)){  //W
             --this.y;
             --anchor.y;
         }
-        else if (k === 97 && !isOccupied(this.x - 1, this.y)){
+        else if (k === 97 && !isOccupied(this.x - 1, this.y)){  //A
             --this.x;
             --anchor.x;
         }
-        else if (k === 115 && !isOccupied(this.x, this.y + 1)){
+        else if (k === 115 && !isOccupied(this.x, this.y + 1)){ //S
             ++this.y;
             ++anchor.y;
         }
-        else if (k === 100 && !isOccupied(this.x + 1, this.y)){
+        else if (k === 100 && !isOccupied(this.x + 1, this.y)){ //D
             ++this.x;
             ++anchor.x;
         }
@@ -75,12 +75,13 @@ class Player {
         else if(stamina < cost) statusW.innerHTML = "You are exhausted";
 
         //Attack
-        else if(calculateDistance(this.x, this.y, x, y) < this.range) {
-            if(objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain) statusW.innerHTML = "You attack " + objects[y][x].terrain + " for 1 points of damage";
-            else statusW.innerHTML = "You attack " + world[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain + " for 1 points of damage";
+        else if(calculateDistance(this.x, this.y, x, y) <= this.range) {
+            damageRoll = roll(damage);
+            if(objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain) statusW.innerHTML = "You attack " + objects[y][x].terrain + " for " +damageRoll +" points of damage";
+            else statusW.innerHTML = "You attack " + world[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
 
             monsters.forEach(monster => {
-                if (x === monster.x && y === monster.y) monster.hp--;
+                if (x === monster.x && y === monster.y) monster.hp -= damageRoll;
             });
             stamina -= cost;
         }else statusW.innerHTML = "You can't reach that";

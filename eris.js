@@ -9,9 +9,10 @@ let player = new Player(sizeX/2, sizeY/2);
 let anchor = {x: player.x - viewPortWidth/2, y: player.y - viewPortHeight/2}; //viewport TOP LEFT anchor
 let monsters = [];
 let loot = [];
+let damageRoll;
 
-monsters.push(new Goblin(62, 35));
-monsters.push(new Goblin(98, 54));
+monsters.push(new Goblin(779, 440));
+monsters.push(new Goblin(820, 459));
 
 statusW.innerHTML = "Welcome to Nair";
 
@@ -97,16 +98,6 @@ function render() {
     }
 }
 
-function getInfo(tile) {
-    activeTile.x = tile.cellIndex;
-    activeTile.y = tile.parentNode.rowIndex;
-    if(alive){
-        if(objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain) statusW.innerHTML = objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
-        else statusW.innerHTML = world[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
-    }
-    debug.innerHTML = "x: " +(anchor.x+activeTile.x) +", y: " +(anchor.y+activeTile.y);
-}
-
 function ai(){
     monsters.forEach(monster => {
         if(monster.hp < 1) {
@@ -122,10 +113,6 @@ function ai(){
 
         if (monster.stamina < goblinMaxStamina) monster.stamina++;
     });
-}
-
-function calculateDistance(x, y, x2, y2){
-    return Math.sqrt(Math.pow((x-x2), 2) + Math.pow((y-y2), 2));
 }
 
 //Main loop
