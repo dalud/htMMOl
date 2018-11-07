@@ -3,12 +3,12 @@ Name: htMMOl
 Columns: 7
 #
 0 0 0    Black
-210 105 30    
-0 100 0    
-128 128 128    Grey 50
-171 171 171    Grey 67
-217 217 217    Grey 85
-255 255 255    White
+210 105 30    Chocolate
+0 100 0    DarkGreen
+255 255 255
+255 255 255
+255 255 255
+255 255 255
 128 0 0    Maroon
 209 0 0    English-red
 255 54 34    Tomato

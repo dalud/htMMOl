@@ -11,8 +11,8 @@ let monsters = [];
 let loot = [];
 let damageRoll;
 
-monsters.push(new Goblin(779, 440));
-monsters.push(new Goblin(820, 459));
+monsters.push(new Goblin(50, 34));
+monsters.push(new Goblin(90, 54));
 
 statusW.innerHTML = "Welcome to Nair";
 
