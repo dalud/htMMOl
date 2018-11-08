@@ -1,8 +1,8 @@
 <?php
 
-$img = imagecreatefrompng('map.png');
+$img = imagecreatefrompng('rnd.png');
 
-$imageSize = getimagesize('map.png');
+$imageSize = getimagesize('rnd.png');
 $width = $imageSize[0];
 $height = $imageSize[1];
 
