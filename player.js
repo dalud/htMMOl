@@ -1,5 +1,5 @@
 let playerHP;
-let maxHP = 12;
+let maxHP = 12000;
 let k; //userInput key
 let command; //command passed to engine (user intent)
 let alive = true;

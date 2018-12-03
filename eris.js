@@ -82,7 +82,6 @@ function render() {
                 if (alive) map.rows[j].cells[i].style = "color:BurlyWood";
                 map.rows[j].cells[i].innerHTML = "Q";
                 objects[y][x].terrain = "That's you!";
-                objects[y][x].occupied = true;
             }
 
             //render monsters
@@ -91,7 +90,6 @@ function render() {
                     if (alive) map.rows[j].cells[i].style = "color:Chartreuse";
                     map.rows[j].cells[i].innerHTML = "g";
                     objects[y][x].terrain = "a goblin";
-                    objects[y][x].occupied = true;
                 }
             });
         }

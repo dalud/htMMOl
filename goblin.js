@@ -65,6 +65,7 @@ class Goblin{
     }
 
     move(direction){
+        objects[this.y][this.x].occupied = false;
         switch(direction){
             case 1:
                 if(!isOccupied(this.x, this.y-1)) this.y--; //W
@@ -83,6 +84,7 @@ class Goblin{
                 //else this.move(1);
                 break;
         }
+        objects[this.y][this.x].occupied = true;
     }
 
     attack(){
