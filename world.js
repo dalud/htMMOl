@@ -39,5 +39,5 @@ for(let j=0; j<sizeY; j++){
         //counter++;
     }
     world[j] = x;
-    objects[j] = oX;x
+    objects[j] = oX;
 }

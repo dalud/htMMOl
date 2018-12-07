@@ -22,6 +22,27 @@ function getInfo(tile) {
     debug.innerHTML = "x: " +(anchor.x+activeTile.x) +", y: " +(anchor.y+activeTile.y) +", dist: " +calculateDistance(player.x, player.y, activeTile.x+anchor.x, activeTile.y+anchor.y);
 }
 
-function findPath(Ax, Ay, Bx, By){ //A = startingPoint, B = destination
+//Path Finding
+//============
 
+class Node {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        visited = false;
+    }
+}
+
+let direction = 0;
+let grid = [viewPortWidth][viewPortHeight];
+
+function findPath(Ax, Ay, Bx, By){ //A = startingPoint, B = destination
+    for(let i=0; i<viewPortWidth; i++){
+        for(let j=0; j<viewPortHeight; j++){
+            grid[i][j].x = anchor.x+i;
+            grid[i][j].y = anchor.y+j;
+        }
+    }
+
+    return direction;
 }
