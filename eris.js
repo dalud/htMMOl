@@ -12,7 +12,7 @@ let loot = [];
 let damageRoll;
 
 monsters.push(new Goblin(50, 34));
-monsters.push(new Goblin(90, 54));
+monsters.push(new Goblin(97, 52));
 
 statusW.innerHTML = "Welcome to Nair";
 
@@ -74,6 +74,7 @@ function render() {
                     if(alive) map.rows[j].cells[i].style = "color:FFBD00";
                     map.rows[j].cells[i].innerHTML = "*";
                     objects[y][x].terrain = "some loot";
+                    objects[y][x].occupied = false;
                 }
             });
 

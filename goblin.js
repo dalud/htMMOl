@@ -42,8 +42,14 @@ class Goblin{
         else if(distY >= distX){
             if(player.y < this.y) {
                 if(!isOccupied(this.x, this.y-1)) this.move(1);
-                else if(player.x < this.x) this.move(2);
-                else this.move(4);
+                else if(player.x < this.x) {
+                    if(!isOccupied(this.x-1, this.y)) this.move(2);
+                    else this.idle();
+                }
+                else if(player.x > this.x) {
+                    if(!isOccupied(this.x+1, this.y)) this.move(4);
+                    else this.idle();
+                }
             }
             else {
                 if(!isOccupied(this.x, this.y+1)) this.move(3);

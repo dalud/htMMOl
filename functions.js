@@ -18,6 +18,10 @@ function getInfo(tile) {
         if(objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain) statusW.innerHTML = objects[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
         else statusW.innerHTML = world[anchor.y+activeTile.y][anchor.x+activeTile.x].terrain;
     }
-    debug.innerHTML = isOccupied(anchor.x+activeTile.x, anchor.y + activeTile.y);
-    //"x: " +(anchor.x+activeTile.x) +", y: " +(anchor.y+activeTile.y) +", dist: " +calculateDistance(player.x, player.y, activeTile.x+anchor.x, activeTile.y+anchor.y);
+    //debug.innerHTML = isOccupied(anchor.x+activeTile.x, anchor.y + activeTile.y);
+    debug.innerHTML = "x: " +(anchor.x+activeTile.x) +", y: " +(anchor.y+activeTile.y) +", dist: " +calculateDistance(player.x, player.y, activeTile.x+anchor.x, activeTile.y+anchor.y);
+}
+
+function findPath(Ax, Ay, Bx, By){ //A = startingPoint, B = destination
+
 }
