@@ -1,9 +1,9 @@
 let playerHP;
-let maxHP = 12000;
+let maxHP = 10;
 let k; //userInput key
 let command; //command passed to engine (user intent)
 let alive = true;
-let stamina;
+let playerStamina;
 let maxStamina;
 let cost; //stamina cost of swinging a weapon
 let xp = 0;
@@ -16,8 +16,8 @@ class Player {
         alive = true;
         playerHP = maxHP;
         this.range = 1;
-        stamina = 10;
-        maxStamina = stamina;
+        playerStamina = 10;
+        maxStamina = playerStamina;
         cost = 2;
         this.gold = 0;
     }
@@ -43,7 +43,7 @@ class Player {
                     this.action(activeTile.x+anchor.x, activeTile.y+anchor.y);
                     break;
             }
-            if(stamina < maxStamina) stamina += .2;
+            if(playerStamina < maxStamina) playerStamina += .2;
             else if(playerHP < maxHP) playerHP += .03;
         }
         command = null;
@@ -72,7 +72,7 @@ class Player {
         //Self
         if (x === this.x && y === this.y) statusW.innerHTML = "You scratch yourself";
 
-        else if(stamina < cost) statusW.innerHTML = "You are exhausted";
+        else if(playerStamina < cost) statusW.innerHTML = "You are exhausted";
 
         //Attack
         else if(calculateDistance(this.x, this.y, x, y) <= this.range) {
@@ -83,7 +83,17 @@ class Player {
             monsters.forEach(monster => {
                 if (x === monster.x && y === monster.y) monster.hp -= damageRoll;
             });
-            stamina -= cost;
+            playerStamina -= cost;
         }else statusW.innerHTML = "You can't reach that";
+    }
+
+    depleteStamina(amount) {
+        if(playerStamina < 1) playerStamina = 0;
+        else playerStamina -= amount;
+    }
+
+    depleteHealth(amount) {
+        if(playerHP < 1) playerHP = 0;
+        else playerHP -= amount;
     }
 }

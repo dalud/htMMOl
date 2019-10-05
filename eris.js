@@ -25,7 +25,7 @@ map.addEventListener('click', () => {
 });
 
 function updatePlayerStatus() {
-    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0; text-align: center;'>HP: " +Math.floor(playerHP) +"<span style='color: green'>\tStamina: " +Math.floor(stamina) +"</span>" +"<span style='text-align: right; color: blueviolet'>\t\tExp: " +xp +"</span>" +"<span style='text-align: right; color: #ffbd00'>\tGold: " +player.gold +"</span>" +"</pre>" ;
+    statsDisplay.innerHTML = "<pre style='color: red; font-size: 150%; font-weight: bolder; margin: 0; text-align: center;'>HP: " +Math.floor(playerHP) +"<span style='color: green'>\tStamina: " +Math.floor(playerStamina) +"</span>" +"<span style='text-align: right; color: blueviolet'>\t\tExp: " +xp +"</span>" +"<span style='text-align: right; color: #ffbd00'>\tGold: " +player.gold +"</span>" +"</pre>" ;
 
     if(playerHP < 1) {
         alive = false;
@@ -41,6 +41,17 @@ function updatePlayerStatus() {
             loot.splice(loot.indexOf(drop), 1);
         }
     })
+    
+    // Apply terrain effects
+    if(world[player.y][player.x].terrain === "water") {
+        if(!alive) return;
+        player.depleteStamina(.4); // Must be more than stamina regen
+        if(playerStamina < 1) {
+            statusW.innerHTML = "You are drowning!";
+            player.depleteHealth(.3);
+            
+        }
+    }
 }
 
 //Build Viewport

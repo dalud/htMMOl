@@ -97,7 +97,7 @@ class Goblin{
         damageRoll = roll(this.damage);
         if(playerHP > 0 && this.stamina === goblinMaxStamina) {
             statusW.innerHTML = "The goblin hits you for " +damageRoll +" points of damage";
-            playerHP -= damageRoll;
+            player.depleteHealth(damageRoll);
             this.stamina = 0;
         }
     }
